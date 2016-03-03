@@ -37,9 +37,9 @@ param richiesteMaxDepositi{DEPOSITI}; #Massima capacità di acciaio lavorato per
 #-------------- VARIABILI --------------------
 #---------------------------------------------
 #Rappresenta il numero di tonnellate prodotto lavorato per ogni spicifico acciaio, turno, macchina e una fabbrica
-var al{FABBRICHE,MACCHINE,TURNI,PRODOTTI}  integer >= 0;
+var al{FABBRICHE,MACCHINE,TURNI,PRODOTTI} integer >= 0;
 #Rappresenta il numero di tonnelate di ogni prodotto lavorato che occorre traspostare da ogni fabbrica ad ogni deposito
-var at{FABBRICHE,PRODOTTI,DEPOSITI}  >= 0;
+var at{FABBRICHE,PRODOTTI,DEPOSITI} >= 0;
 #Rappresenta il numero di camion neccessari per trasportare tutto il prodotto lavorato di ogni fabbrica ai rispettivi magazzini
 var nc{FABBRICHE,DEPOSITI} integer >= 0;
 #Data una fabbrica, una macchina, un turno di lavoro e un tipo di acciaio, questa variabile logica binaria indica se è stata eseguita una lavorazione del prodotto indicato
@@ -63,7 +63,6 @@ maximize profitto:
 			#Profitto ottenuto dalla vendita dell'acciaio meno il suo costo iniziale
 			sum{p in PRODOTTI}((guadagniAFinito[p]-costiAGrezzo[p])*sum{f in FABBRICHE,m in MACCHINE,t in TURNI}al[f,m,t,p])-
 
-			#PICCOLO PROBLEMA
 			#Costo dei dipendenti che seguono le macchine
 			sum{f in FABBRICHE, m in MACCHINE,t in TURNI}(mAttive[f,m,t]*numOperaiMacchine*costoOperaioProduzione)-
 
@@ -76,7 +75,7 @@ maximize profitto:
 			#Costi del trasporto con i camion 
 			sum{f in FABBRICHE,d in DEPOSITI}(nc[f,d]*costiTrasporto[f,d])-
 
-			#Costi dei operai che guidano i camion
+			#Costi dei dipendenti che guidano i camion
 			sum{f in FABBRICHE,d in DEPOSITI}(nc[f,d]*tempiTrasporto[f,d])*costoOperaioTrasporto;
 
 
