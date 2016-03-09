@@ -1,0 +1,970 @@
+\documentclass[12pt]{article} % Default font size is 12pt, it can be changed here
+
+\usepackage{geometry} % Required to change the page size to A4
+\geometry{a4paper} % Set the page size to be A4 as opposed to the default US Letter
+
+\usepackage{graphicx} % Required for including pictures
+
+\usepackage{float} % Allows putting an [H] in \begin{figure} to specify the exact location of the figure
+
+\usepackage{wrapfig} % Allows in-line images such as the example fish picture
+
+\usepackage[italian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{listings}
+\usepackage{lstautogobble}
+
+
+\linespread{1.2} % Line spacing
+
+\lstset{
+  basicstyle=\ttfamily\scriptsize,
+  breaklines=true,
+  autogobble=true,
+  frame=single,
+inputencoding=utf8,
+            extendedchars=true,
+            literate=%
+            {é}{{\'{e}}}1
+            {è}{{\`{e}}}1
+            {ê}{{\^{e}}}1
+            {ë}{{\¨{e}}}1
+            {û}{{\^{u}}}1
+            {ù}{{\`{u}}}1
+            {â}{{\^{a}}}1
+            {à}{{\`{a}}}1
+            {î}{{\^{i}}}1
+            {ì}{{\'{i}}}1
+            {ô}{{\^{o}}}1
+            {ç}{{\c{c}}}1
+            {Ç}{{\c{C}}}1
+            {É}{{\'{E}}}1
+            {Ê}{{\^{E}}}1
+            {À}{{\`{A}}}1
+            {Â}{{\^{A}}}1
+            {Î}{{\^{I}}}1
+}
+
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{\Huge \textbf{AMPLSteelIndustryProblem} \\ \Huge Un problema di Programmazione Lineare }
+% Author
+\author{\textsc{Davide Rigoni}}
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
+\begin{document}
+
+\maketitle
+\newpage
+
+\tableofcontents % Include a table of contents
+\listoftables
+
+\newpage
+
+%----------------------------------------------------------------------------------------
+% FORMULAZIONE PROBLEMA
+%----------------------------------------------------------------------------------------
+\section{Formulazione del problema}
+Una industria metalmeccanica possiede due fabbriche che grazie all'utilizzo di macchine apposite, producono tre tipi di acciaio diverso per soddisfare le richieste del territorio.
+
+La prima fabbrica F\ped{1} produce acciaio normale, inox e temprato con l'utilizzo di quattro  macchine: M\ped{1}, M\ped{2}, M\ped{3} e M\ped{4}.
+
+La seconda fabbrica F\ped{2} produce solamente acciaio normale e temprato con l'utilizzo di due macchine: M\ped{1}, M\ped{2}.
+
+Per evitare i lunghi tempi di avvio delle macchine, l'industria le fa lavorare 24 ore su 24 dividendo la giornata in tre turni lavorativi: 8-16, 16-24 e 24-8. 
+
+Le tabelle seguenti riportano per ogni turno di lavoro e per ogni macchina il tempo necessario in ore per lavorare una tonnellata di acciaio nella prima fabbrica.
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{ | c | c | c | c | c | }
+    \hline
+    \textbf{Acciaio} & \textbf{M\ped{1}} & \textbf{M\ped{2}} & \textbf{M\ped{3}} & \textbf{M\ped{4}} \\
+    \hline
+    Normale & 0.9 & 1.1 & 0.9 & 0.8 \\
+    Inox & 1.5 & 1.6 & 1.4 & 1.4 \\
+    Temprato & 1.1 & 1 & 1.1 & 1.1 \\
+    \hline
+  \end{tabular}
+  \caption{Turno di lavoro 8-16 fabbrica 1}
+\end{table}
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{ | c | c | c | c | c | }
+    \hline
+    \textbf{Acciaio} & \textbf{M\ped{1}} & \textbf{M\ped{2}} & \textbf{M\ped{3}} & \textbf{M\ped{4}} \\
+    \hline
+    Normale & 1 & 1 & 0.9 & 0.9 \\
+    Inox & 1.5 & 1.5 & 1.5 & 1.3 \\
+    Temprato & 1 & 1 & 1 & 1 \\
+    \hline
+  \end{tabular}
+  \caption{Turno di lavoro 16-24 fabbrica 1} 
+\end{table}
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{ | c | c | c | c | c | }
+    \hline
+    \textbf{Acciaio} & \textbf{M\ped{1}} & \textbf{M\ped{2}} & \textbf{M\ped{3}} & \textbf{M\ped{4}} \\
+    \hline
+    Normale & 1.3 & 1.2 & 1 & 1 \\
+    Inox & 1.7 & 1.7 & 1.3 & 1.3 \\
+    Temprato & 1.4 & 1.3 & 1.2 & 1.1\\
+    \hline
+  \end{tabular}
+  \caption{Turno di lavoro 24-8 fabbrica 1} 
+\end{table}
+
+\newpage
+
+Le tabelle seguenti riportano per ogni turno di lavoro e per ogni macchina il tempo necessario in ore per lavorare una tonnellata di acciaio nella seconda fabbrica.
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{ | c | c | c | c | }
+    \hline
+    \textbf{Acciaio} & \textbf{M\ped{1}} & \textbf{M\ped{2}} & \textbf{M\ped{3}}  \\
+    \hline
+    Normale & 1 & 1 & 1 \\
+    Temprato & 1.2 & 1.3 & 1.1 \\
+    \hline
+  \end{tabular}
+  \caption{Turno di lavoro 8-16 fabbrica 2}
+\end{table}
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{ | c | c | c | c | }
+    \hline
+    \textbf{Acciaio} & \textbf{M\ped{1}} & \textbf{M\ped{2}} & \textbf{M\ped{3}}  \\
+    \hline
+    Normale & 1.1 & 0.8 & 0.9 \\
+    Temprato & 1 & 1.3 & 1.3 \\
+    \hline
+  \end{tabular}
+  \caption{Turno di lavoro 16-24 fabbrica 2} 
+\end{table}
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{ | c | c | c | c | }
+    \hline
+    \textbf{Acciaio} & \textbf{M\ped{1}} & \textbf{M\ped{2}} & \textbf{M\ped{3}} \\
+    \hline
+    Normale & 1 & 1.2 & 1 \\
+    Temprato & 1 & 1.1 & 1 \\
+    \hline
+  \end{tabular}
+  \caption{Turno di lavoro 24-8 fabbrica 2} 
+\end{table}
+
+Tuttavia, per questioni sindacali, in entrambe le fabbriche ciascuna macchina può lavorare per un tempo limitato e dipendente dai turni di lavoro degli operai, come riportato nelle tabelle che seguono:
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{ | c | c | c | c | }
+    \hline
+    \textbf{Macchina} & \textbf{8-16} & \textbf{16-24} & \textbf{24-8} \\
+    \hline
+    M\ped{1} & 7 & 6 & 6 \\
+    M\ped{2} & 7 & 7 & 6 \\
+    M\ped{3} & 7 & 7 & 6 \\
+    M\ped{4} & 7 & 6 & 6 \\
+    \hline
+  \end{tabular}
+  \caption{Tempo di lavoro delle macchine nella fabbrica 1}
+\end{table}
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{ | c | c | c | c | }
+    \hline
+    \textbf{Macchina} & \textbf{8-16} & \textbf{16-24} & \textbf{24-8} \\
+    \hline
+    M\ped{1} & 7 & 6 & 7 \\
+    M\ped{2} & 7 & 6 & 7 \\
+    M\ped{3} & 7 & 6 & 7 \\
+    \hline
+  \end{tabular}
+  \caption{Tempo di lavoro delle macchine nella fabbrica 2}
+\end{table}
+
+Per creare ciascun tipo di acciaio sono necessari tipi e quantità diverse tra loro di materiale grezzo, il cui costo totale in migliaia di euro è riportato per tonnellata nella tabella seguente:
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{ | c | c | c | c | }
+    \hline
+    & \textbf{Normale} & \textbf{Inox} & \textbf{Temprato} \\
+    \hline
+    Costo & 5.5 & 24 & 19 \\
+    \hline
+  \end{tabular}
+  \caption{Costo totale in migliaia di euro per tonnellata di acciaio}
+\end{table}
+
+
+L'azienda a fine giornata trasporta tutto l'acciaio lavorato dalle due fabbriche verso i tre depositi di stoccaggio, utilizzando dei camion, la cui somma dei di benzina, usura e tempo sono riportati nelle seguenti tabelle:
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{ | c | c | c | c |}
+    \hline
+    \textbf{Fabbrica} & \textbf{D\ped{1}} & \textbf{D\ped{2}} & \textbf{D\ped{3}}\\
+    \hline
+    F\ped{1} & 1000 & 1340 & 2500 \\
+    F\ped{2} & 1000 & 1900 & 1200 \\
+    \hline
+  \end{tabular}
+  \caption{Costi in euro per trasportare un carico di 5 barili}
+\end{table}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{ | c | c | c | c |}
+    \hline
+    \textbf{Fabbrica} & \textbf{D\ped{1}} & \textbf{D\ped{2}} & \textbf{D\ped{3}}\\
+    \hline
+    F\ped{1} & 1 & 2 & 2.5 \\
+    F\ped{2} & 1.8 & 1.9 & 2.1 \\
+    \hline
+  \end{tabular}
+  \caption{Tempo necessario per trasportare un carico di 5 barili}
+\end{table}
+
+La richiesta di acciaio di ciascun tipo per ogni deposito è riassunta nella seguente tabella:
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{ | c | c | c | c | }
+    \hline
+    \textbf{Acciaio} & \textbf{D\ped{1}} & \textbf{D\ped{2}} & \textbf{D\ped{3}}  \\
+    \hline
+    Normale & 15 & 15 & 15 \\
+    Inox & 10 & 8 & 9 \\
+    Temprato & 10 & 10 & 12 \\
+    \hline
+  \end{tabular}
+  \caption{Richiesta di acciaio per ciascun deposito}
+\end{table}
+
+Infine si assuma che tutto l'acciaio prodotto venga inviato ai depositi in quanto nelle fabbriche non c'è la possibilità di immagazzinare prodotto e che tutto l'acciaio lavorato venga assorbito dal mercato fruttando all'azienda i seguenti profitti in migliaia di euro per tonnellata:
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{ | c | c | c | c | }
+    \hline
+    & \textbf{Normale} & \textbf{Inox} & \textbf{Temprato}  \\
+    \hline
+    Profitto & 6 & 25 & 20 \\
+    \hline
+  \end{tabular}
+  \caption{Profitti in migliaia di euro per tonnellata di acciaio}
+\end{table}
+
+Si formuli un modello di Programmazione Lineare che verifichi le specifiche del problema descritto, al fine massimizzare il profitto della fabbrica sapendo:
+
+\begin{itemize}
+\item Per cercare di diminuire i costi, le macchine possono produrre solo multipli di tonnellate di acciaio lavorato.
+\item Per far funzionare una macchina servono 5 operai la cui retribuzione è 10 euro l'ora a ciascuno;
+\item Gli operai per motivi di sicurezza non possono cambiare macchina durante il loro turno di lavoro e anche se la macchina non produce tutto il tempo vengono comunque pagati.
+\item Un camion è guidato da un solo operaio la cui retribuzione oraria ammonta a 12 euro;
+\item Un camion può trasportare al massimo 5 barili da due tonnellate l'uno di acciaio lavorato;
+\item Se una macchina lavora più tipi di acciaio diversi tra loro, prima del cambio necessita di svolgere un ciclo di pulizia che costa 150 euro e impiega 5 operai per 1 ora;
+\item Alla fine di ogni turno di lavoro occorre effettuare una pulizia della macchina se è stata adoperata;
+\item Poiché è possibile impostare una macchina per produrre un solo tipo di prodotto per tutto il giorno, permettendo di non eseguire la pulitura della macchina alla fine di ogni turno, ma solo a fine giornata, valutare per entrambe le fabbriche se questa opzione permette un profitto maggiore e in caso indicare il prodotto e la macchina.
+\item Nella prima fabbrica, la macchina M\ped{1} può lavorare solo acciaio Inox.
+\item Nella seconda fabbrica, la macchina M\ped{2} può lavorare solo acciaio Temprato.
+\item I depositi sono completamente vuoti e possono immagazzinare al massimo 40 tonnellate ciascuno di acciaio.
+\end{itemize}
+\newpage
+
+
+
+\section{Soluzione}
+Di seguito sarà data una spiegazione della soluzione
+
+\subsection{Dati del modello}
+	Il file .dat contiene una rappresentazione di tutti i dati e vincoli imposti dal problema.
+
+	\subsubsection{Dichiarazione degli insiemi}
+		In tale file vengono immediatamente definiti gli insiemi e si fa notare che quelli dei prodotti e delle macchine sono uguali per entrambe le fabbriche, anche se nella seconda non esiste la macchina M\ped{4} e non può produrre acciaio Inox.
+		\begin{lstlisting}
+		set TURNI := "8-16","16-24","24-8"; #Turni lavorativi imposti dal sindacato
+		set PRODOTTI := "Normale","Inox","Temprato"; #Tipologia di acciaio
+		set MACCHINE := "M1","M2","M3","M4"; #Macchine di lavoro
+		set DEPOSITI := "D1","D2","D3"; #Depositi dell'azienda
+		set FABBRICHE := "F1","F2"; #Fabbriche dell'azienda
+		\end{lstlisting}
+
+	\subsubsection{Definizione dei parametri}
+		Successivamente vengono assegnati i valori ai parametri che verranno poi usati nel file .mod.
+		Il parametro \textit{bigM} rappresenta un valore grande non raggiungibile dal problema, e viene usata per legare le variabili logiche alla quantità di prodotto creato. In questo caso il suo valore è 100 e cio\'e supera le tonnellate massime di acciaio lavorato che si pu\'o produrre in qualsiasi turno.
+		\begin{lstlisting}
+		param bigM := 100;
+		\end{lstlisting}
+
+		Il parametro \textit{guadagniAFinito} rappresenta il guadagno derivante dalla vendita di una tonnellata di acciaio lavorato sul mercato, mentre il parametro \textit{costiAGrezzo} rappresenta il costo dell'acciaio grezzo anch'esso per tonnellata.
+		\begin{lstlisting}
+		param guadagniAFinito :=
+		      "Normale" 6000
+		      "Inox" 25000
+		      "Temprato" 20000 ;
+
+		param costiAGrezzo := 
+		      "Normale" 5500
+		      "Inox" 24000
+		      "Temprato" 19000 ;
+		\end{lstlisting}
+
+		Il parametro \textit{tempiMaxMacchine} rappresenta il tempo massimo di lavoro per ogni macchina in ogni turno e fabbrica. 
+		Poich\'e nella fabbrica F\ped{2} non esiste la macchina M\ped{4} allora il tempo di produzione è impostato a 0.
+		\begin{lstlisting}
+		param tempiMaxMacchine:=	
+		      ["F1",*,*]: "8-16" "16-24" "24-8" :=
+		              "M1" 7 6 6
+		      	      "M2" 7 7 6
+		      	      "M3" 7 7 6
+		      	      "M4" 7 6 6 
+
+		      ["F2",*,*]: "8-16" "16-24" "24-8" :=
+		      	      "M1" 7 6 7
+		      	      "M2" 7 6 7
+		      	      "M3" 7 6 7
+			          "M4" 0 0 0;
+		\end{lstlisting}
+
+		Il parametro \textit{tempiProd} rappresenta il tempo di produzione di una tonnellata di acciaio, data una macchina, un turno e una fabbrica.
+		Poich\'e nella fabbrica F\ped{2} non è possibile lavorare l'acciaio Inox nemmeno nelle macchine M\ped{1}, M\ped{2}, M\ped{3}, il valore corrispondente è molto alto e in questo caso corrisponde al valore del parametro \textit{bigM}.
+		Nella fabbrica F\ped{2} i valori relativi alla macchina M\ped{4} potrebbero assumere qualsiasi altro valore, in quanto il parametro \textit{tempiMaxMacchine} farà si che non venga creato nessun prodotto da tale macchina.
+		\begin{lstlisting}
+		param tempiProd:=
+		["F1",*,"8-16",*]: "Normale" "Inox" "Temprato" :=
+		      "M1" 0.9 1.5 1.1
+		      "M2" 1 1.6 1
+		      "M3" 0.9 1.4 1.1
+		      "M4" 0.8 1.4 1.1
+		      
+		["F1",*,"16-24",*]: "Normale" "Inox" "Temprato" :=
+		      "M1" 1 1.5 1
+		      "M2" 1 1.5 1
+		      "M3" 0.9 1.5 1
+		      "M4" 0.9 1.3 1
+
+		["F1",*,"24-8",*]: "Normale" "Inox" "Temprato" :=
+		      "M1" 1.3 1.7 1.4
+		      "M2" 1.2 1.7 1.3
+		      "M3" 1 1.3 1.2
+		      "M4" 1 1.3 1.1
+
+		["F2",*,"8-16",*]: "Normale" "Inox" "Temprato" :=
+		      "M1" 1 100 1.2
+		      "M2" 1 100 1.3
+		      "M3" 1 100 1.1 
+		      "M4" 100 100 100
+		      
+		["F2",*,"16-24",*]: "Normale" "Inox" "Temprato" :=
+		      "M1" 1.1 100 1
+		      "M2" 0.8 100 1.3
+		      "M3" 0.9 100 1.3 
+		      "M4" 100 100 100
+
+		["F2",*,"24-8",*]: "Normale" "Inox" "Temprato" :=
+		      "M1" 1 100 1
+		      "M2" 1.2 100 1.1
+		      "M3" 1 100 1 
+		      "M4" 100 100 100;
+		\end{lstlisting}
+
+		Questi parametri rappresentano rispettivamente il numero di operai necessari ad ogni macchina per funzionare correttamente, il costo e il tempo necessario per pulirla, e  il salario orario di ogni dipendente che segue la produzione.
+		\begin{lstlisting}
+		param numOperaiMacchine := 5;
+		param costoPuliziaM := 150;
+		param tempoPuliziaM := 1;
+		param costoOperaioProduzione := 10;
+		\end{lstlisting}
+
+		Il parametro \textit{mImpostateObbligatorie} permette di indicare per ogni fabbrica, macchina e tipo di produzione, se tale macchina deve essere impostata alla produzione del solo prodotto indicato.
+		Questo parametro ha solamente valori binari e dunque per indicare che una macchina è impostata occorre usare il valore 1, altrimenti 0.
+		In questo caso la macchina M\ped{1} produce solo acciaio Normale nella fabbrica F\ped{1}, mentre la macchina M\ped{2} produce solo acciaio Temprato nella fabbrica F\ped{2}
+		Le fabbriche rimanenti possono produrre più tipi di acciaio o anche nessuno.
+		\begin{lstlisting}
+		param mImpostateObbligatorie :=
+		      ["F1",*,*]: "Normale" "Inox" "Temprato" :=
+		      	"M1" 1 0 0
+			      "M2" 0 0 0 
+			      "M3" 0 0 0 
+			      "M4" 0 0 0 
+
+		      ["F2",*,*]: "Normale" "Inox" "Temprato" :=
+		            "M1" 0 0 0
+			      "M2" 0 0 1 
+			      "M3" 0 0 0 
+			      "M4" 0 0 0; 
+		\end{lstlisting}
+
+		I parametri seguenti indicano rispettivamente i costi e i tempi di trasporto di un camion verso i depositi, il costo orario di un dipendente camionista e le tonnellate massime di prodotto che si possono trasportare.
+		\begin{lstlisting}
+		param costiTrasporto: "D1" "D2" "D3" := 
+		      "F1" 1000 1340 2500
+		      "F2" 1000 1900 1200;
+
+		param tempiTrasporto: "D1" "D2" "D3" := 
+		      "F1" 1 2.0 2.5
+		      "F2" 1.8 1.9 2.1;
+
+		param costoOperaioTrasporto := 12;
+		param tonnellatePerCamion := 10; #5 barili da due tonnellate ciascuno
+		\end{lstlisting}
+
+		In fine i parametri \textit{richiesteMinDepositi} e \textit{richiesteMaxDepositi} rappresentano rispettivamente la richiesta di ogni tipo di acciaio da parte dei depositi e la loro capienza massima misurata in tonnellate di acciaio.
+		\begin{lstlisting}
+		param richiesteMinDepositi: "D1" "D2" "D3" :=
+		      "Normale" 15 15 15
+		      "Inox" 10 8 9
+		      "Temprato" 10 10 12;
+
+		param richiesteMaxDepositi:=
+			"D1" 40
+			"D2" 40
+			"D3" 40;
+		\end{lstlisting}
+
+
+
+\newpage
+	\subsection{Modello del problema}
+	Il file .mod rappresenta il modello del problema.
+
+	\subsubsection{Dichiarazione degli insiemi}
+		Inizia dichiarando la presenza di insiemi che corrispondono a quelli presenti nel file .dat.
+		\begin{lstlisting}
+		set TURNI; 
+		set PRODOTTI; 
+		set MACCHINE;
+		set DEPOSITI; 
+		set FABBRICHE; 
+		\end{lstlisting}
+
+	\subsubsection{Dichiarazione dei parametri}
+		Successivamente vengono definiti i parametri anch'essi presenti nel file .dat specificando, se necessario, gli insiemi da utilizzare per scorrere i valori.
+		\begin{lstlisting}
+		param bigM;
+		param guadagniAFinito{PRODOTTI}; 
+		param costiAGrezzo{PRODOTTI};
+		param tempiMaxMacchine{FABBRICHE,MACCHINE,TURNI};
+		param tempiProd{FABBRICHE,MACCHINE,TURNI,PRODOTTI}; 
+		param numOperaiMacchine; 
+		param costoPuliziaM; 
+		param tempoPuliziaM;
+		param costoOperaioProduzione;
+		param mImpostateObbligatorie{FABBRICHE,MACCHINE,PRODOTTI};
+		param costiTrasporto{FABBRICHE,DEPOSITI};
+		param tempiTrasporto{FABBRICHE,DEPOSITI}; 
+		param costoOperaioTrasporto;
+		param tonnellatePerCamion;
+		param richiesteMinDepositi{PRODOTTI,DEPOSITI}; 
+		param richiesteMaxDepositi{DEPOSITI}; 
+		\end{lstlisting}
+
+	\subsubsection{Dichiarazione delle variabili}
+		Successivamente vengono dichiarate le variabili del problema.
+
+		La variabile \textit{al}(Acciaio Lavorato) rappresenta per ogni fabbrica, macchina e turni, la quantità di un preciso tipo di acciaio che è stata lavorata. I valori di questa variabile sono interi positivi o nulli.
+		\begin{lstlisting}
+		var al{FABBRICHE,MACCHINE,TURNI,PRODOTTI} integer >= 0;
+		\end{lstlisting}
+
+		La variabile \textit{at}(Acciaio Trasportato) rappresenta per ogni fabbrica la quantità di un preciso acciaio lavorato che deve essere trasportata verso gli altri depositi.
+		Si noti che essendo la richiesta dei depositi e la produzione di ogni macchina in tonnellate, cio\'e un numero intero, allora anche questa variabile avr\'a valori interi positivi o nulli anche se non esplicitamente dichiarata come tale.
+		\begin{lstlisting}
+		var at{FABBRICHE,PRODOTTI,DEPOSITI} >= 0;
+		\end{lstlisting}
+
+		La variabile \textit{nc}(Numero Camion) rappresenta per ogni fabbrica e deposito, il numero di camion necessari per trasportare tutto il prodotto lavorato. I valori di questa variabile sono definiti interi positivi o nulli.
+		\begin{lstlisting}
+		var nc{FABBRICHE,DEPOSITI} integer >= 0;
+		\end{lstlisting}
+
+		La variabile logica \textit{mAcciaio} per ogni fabbrica, macchina,turno di lavoro e prodotto, indica se \'e stata eseguita una lavorazione del prodotto indicato. I valori di questa variabile sono dichiarati binari e dunque possono essere 1, se è stata eseguita la lavorazione del prodotto o 0 nel caso in cui la macchina non abbia eseguito la lavorazione.
+		\begin{lstlisting}
+		var mAcciaio{FABBRICHE,MACCHINE,TURNI,PRODOTTI} binary;
+		\end{lstlisting}
+
+		La variabile logica \textit{mAttive}(Macchine Attive) per ogni fabbrica, macchina e turno di lavoro, indica se è stata eseguita una produzione di acciaio. I valori di questa variabile sono dichiarati binari e dunque possono essere 1, se la macchina ha eseguito almeno una lavorazione, altrimenti 0.
+		\begin{lstlisting}
+		var mAttive{FABBRICHE,MACCHINE,TURNI} binary;
+		\end{lstlisting}
+
+		La variabile logica \textit{mImpostate}(Macchine Impostate) indica se una precisa macchina è stata impostata per la lavorazione di un preciso prodotto, data una fabbrica, una macchina ed un tipo di acciaio.I valori di questa variabile sono dichiarati binari e dunque possono essere 1, se la macchina è impostata su un preciso prodotto, altrimenti 0.
+		\begin{lstlisting}
+		var mImpostate{FABBRICHE,MACCHINE,PRODOTTI} binary;
+		\end{lstlisting}
+
+	\subsubsection{Funzione obbiettivo}
+		La funzione obbiettivo vuole massimizzare il profitto e dunque calcola il guadagno netto proveniente dalla vendita di tutto l'acciaio prodotto meno la spesa di quello grezzo, utilizzato durante la lavorazione.
+		\begin{lstlisting}
+		sum{p in PRODOTTI}((guadagniAFinito[p]-costiAGrezzo[p])*sum{f in FABBRICHE,m in MACCHINE,t in TURNI}al[f,m,t,p])-
+		\end{lstlisting}
+
+		Successivamente a questo profitto viene sottratto il numero di dipendenti necessari per far funzionare le macchine moltiplicato per il salario orario e il numero di ore lavorative.
+		\begin{lstlisting}
+		sum{f in FABBRICHE, m in MACCHINE,t in TURNI}(mAttive[f,m,t]*numOperaiMacchine*tempiMaxMacchine[f,m,t]*costoOperaioProduzione)-
+		\end{lstlisting}
+
+		Inoltre viene sottratto il costo derivante dalle pulizie delle macchine non impostate.
+		Si noti che una macchina che produce acciaio, ma non è stata impostata, occorre pulirla ad ogni lavorazione di acciaio differente e ad ogni fine turno, mentre una macchina se impostata allora produrr\'a per tutti i turni un solo tipo di acciaio.
+		\begin{lstlisting}
+		sum{f in FABBRICHE, m in MACCHINE,t in TURNI}sum{p in PRODOTTI}(mAcciaio[f,m,t,p]- mImpostate[f,m,p])*costoPuliziaM-
+		\end{lstlisting}
+
+		Successivamente viene sottratto anche il costo derivante dalle pulizie a fine giornata di ogni macchina impostata.
+		\begin{lstlisting}
+		sum{f in FABBRICHE, m in MACCHINE,p in PRODOTTI}mImpostate[f,m,p]*costoPuliziaM -
+		\end{lstlisting}
+
+		In fine viene sottratto anche il costo sia del camion che del personale che deriva dal trasporto dell'acciaio dalle fabbriche ai depositi .
+		\begin{lstlisting}
+		sum{f in FABBRICHE,d in DEPOSITI}(nc[f,d]*costiTrasporto[f,d])-
+		sum{f in FABBRICHE,d in DEPOSITI}(nc[f,d]*tempiTrasporto[f,d])*costoOperaioTrasporto;
+		\end{lstlisting}
+
+
+	\subsubsection{Vincoli}
+		In fine si trovano i vincoli che impongono limiti o precisi valori alle variabili.
+
+		Il vincolo \textit{VtempoMNImpostate}(Vincolo di tempo macchine non impostate) fa si che per ogni fabbrica, macchina e turno, il tempo effettivo di lavorazione dell'acciaio che viene prodotto, sia sempre inferiore o uguale al tempo di lavoro dei dipendenti imposto dai sindacati.
+		In particolar modo tiene conto anche del tempo di pulizia della macchina solo se essa non è impostata.
+		\textit{(mAcciaio[f,m,t,p]- mImpostate[f,m,p])} risulta 1 solo quando la macchina non è impostata, altrimenti 1.
+		\begin{lstlisting}
+		s.t. VtempoMNImpostate{f in FABBRICHE, m in MACCHINE,t in TURNI}: sum{p in PRODOTTI}(tempiProd[f,m,t,p]*al[f,m,t,p] + (mAcciaio[f,m,t,p]- mImpostate[f,m,p])*tempoPuliziaM) <= tempiMaxMacchine[f,m,t];
+		\end{lstlisting}
+
+		Questo vincolo fa si che per ogni fabbrica, macchina e prodotto, il tempo complessivo di lavorazione sia sempre inferiore o uguale al tempo di lavoro dei dipendenti imposto dai sindacati.
+		In particolar modo tiene conto del tempo di pulizia della macchina nel caso essa sia impostata alla produzione di un solo tipo di acciaio.
+		\begin{lstlisting}
+		s.t. VtempoMImpostate{f in FABBRICHE, m in MACCHINE,p in PRODOTTI}: sum{t in TURNI}(tempiProd[f,m,t,p]*al[f,m,t,p])+mImpostate[f,m,p]*tempoPuliziaM <= sum{t in TURNI}tempiMaxMacchine[f,m,t];
+		\end{lstlisting}
+
+		Questo vincolo lega la variabile \textit{al} con la variabile \textit{at}, permettendo così di legare le richieste di acciaio dei depositi, con la loro produzione.
+		\begin{lstlisting}
+		s.t. VCat{f in FABBRICHE,p in PRODOTTI}: sum{m in MACCHINE,t in TURNI}al[f,m,t,p] = sum{d in DEPOSITI}at[f,p,d];
+		\end{lstlisting}
+
+		Questi due vincoli impongono alla variabile \textit{at} un limite inferiore dovuto alla richiesta dei depositi e un vincolo superiore dovuto alla loro massima capienza
+		\begin{lstlisting}
+		s.t. VRichiesteMinDepositi{p in PRODOTTI,d in DEPOSITI}: sum{f in FABBRICHE}at[f,p,d] >= richiesteMinDepositi[p,d];
+		s.t. VRichiesteMaxDepositi{d in DEPOSITI}: sum{f in FABBRICHE,p in PRODOTTI}at[f,p,d] <= richiesteMaxDepositi[d];
+		\end{lstlisting}
+
+		Questo vincolo lega la variabile \textit{nc} a quella \textit{at}, permettendo così di definire per ogni fabbrica e deposito, il numero di camion necessari per trasportare tutto l'acciaio prodotto.
+		In particolare la variabile \textit{nc} è un intero e poich\'e a parità di acciaio, l'aumentare del numero di camion diminuisce il profitto, in automatico il numero sarà l'intero superiore risultante dalla divisione della \textit{somma del prodotto diviso la capienza di un camion}
+		\begin{lstlisting}
+		s.t. VUCamion{f in FABBRICHE,d in DEPOSITI}: sum{p in PRODOTTI}at[f,p,d] <= nc[f,d]*tonnellatePerCamion;
+		\end{lstlisting}
+
+		Questo vincolo permette di legare la variabile logica \textit{mAcciaio} alla variabile al
+		Poich\'e all'aumentare \textit{mAcciaio} provoca un costo maggiore, non si presenteranno valori spuri in quanto la variabile verr\'a posta in automatico a 0 quando possibile
+		\begin{lstlisting}
+		s.t. VUmAcciaio{f in FABBRICHE,m in MACCHINE,t in TURNI,p in PRODOTTI}: al[f,m,t,p] <= bigM*mAcciaio[f,m,t,p];
+		\end{lstlisting}
+
+		Questo vincolo permette di legare la variabile logica mAttive alla variabile \textit{mAcciaio}
+		Poich\'e all'aumentare mAttive provoca un costo maggiore, non si presenteranno valori spuri in quanto la variabile verrà posta in automatico a zero quando possibile, altrimenti viene posta a 1.
+		\begin{lstlisting}
+		s.t. VUmAttive{f in FABBRICHE,m in MACCHINE,t in TURNI}: sum{p in PRODOTTI}mAcciaio[f,m,t,p] <= bigM*mAttive[f,m,t];
+		\end{lstlisting}
+
+		Questo vincolo permette di legare la variabile logica \textit{mImpostate} alla variabile logica \textit{mAcciaio}.
+		Data una fabbrica, una macchina e un prodotto, la macchina risulta impostata su tale lavorazione se e solo se non ha lavorato altri prodotti in tutta la giornata.
+		Poich\'e impostare una macchina induce ad eseguire meno cicli di pulizia, e dunque ad un minor costo, la funzione obbiettivo farà si che non si verifichino valori spuri, e imposterà ad 1 la variabile logica mImpostate quando possibile.
+		In particolare \textit{mImpostate[f,m,p] + 1 - 2*mImpostate[f,m,p]} vale 0 se mImpostate[f,m,p] = 1 e 0 se mImpostate[f,m,p] = 0.
+		\begin{lstlisting}
+		s.t. VUmImpostate{f in FABBRICHE,m in MACCHINE,p in PRODOTTI}:  sum{t in TURNI,pp in PRODOTTI:pp <> p}mAcciaio[f,m,t,pp] <= bigM*(mImpostate[f,m,p] + 1 - 2*mImpostate[f,m,p]) ;
+		\end{lstlisting}
+
+		Questo vincolo fa si di limitare il problema delle macchine da impostare, imponendo dei vincoli esterni su esso tramite il parametro passato dal file .dat.
+		\begin{lstlisting}
+		s.t. VmImpostateObbligatorie{f in FABBRICHE,m in MACCHINE,p in PRODOTTI}:mImpostate[f,m,p] >= mImpostateObbligatorie[f,m,p];
+		\end{lstlisting}
+
+		Questo vincolo fa si che data una fabbrica e una macchina, la variabile logica \textit{mImpostate} possa risultare 1 solo su un unico prodotto.
+		\begin{lstlisting}
+		s.t. VCmImpostate{f in FABBRICHE,m in MACCHINE}: sum{p in PRODOTTI}mImpostate[f,m,p] <= 1;
+		\end{lstlisting}
+
+
+
+		\subsubsection{Soluzione del modello}
+		Tramite il comando:
+		\begin{lstlisting}
+			reset; model steel.mod; data steel.dat;option solver cplexamp; solve;
+		\end{lstlisting}
+		Si ottiene la seguente soluzione per la funzione obbiettivo: \textbf{62062.4}\\
+		E i seguenti valori per le variabili del problema primale:
+
+		Di seguito la variabile \textit{al} mostra il numero di tonnellate che si devono produrre acciaio, per ogni fabbrica,  macchina,turno e prodotto. 
+		\begin{lstlisting}
+			al [F1,*,16-24,*]
+			:  Inox Normale Temprato    :=
+			M1   0      6       0
+			M2   4      0       0
+			M3   4      0       0
+			M4   4      0       0
+
+			 [F1,*,24-8,*]
+			:  Inox Normale Temprato    :=
+			M1   0      4       0
+			M2   0      4       0
+			M3   4      0       0
+			M4   4      0       0
+
+			 [F1,*,8-16,*]
+			:  Inox Normale Temprato    :=
+			M1   0      7       0
+			M2   0      6       0
+			M3   5      0       0
+			M4   5      0       0
+
+			 [F2,*,16-24,*]
+			:  Inox Normale Temprato    :=
+			M1   0      0       6
+			M2   0      0       4
+			M3   0      5       0
+			M4   0      0       0
+
+			 [F2,*,24-8,*]
+			:  Inox Normale Temprato    :=
+			M1   0      0       7
+			M2   0      0       6
+			M3   0      7       0
+			M4   0      0       0
+
+			 [F2,*,8-16,*]
+			:  Inox Normale Temprato    :=
+			M1   0      0       5
+			M2   0      0       5
+			M3   0      7       0
+			M4   0      0       0;
+		\end{lstlisting}
+
+		Di seguito sono elencate tutte le tonnellate di ogni tipo di acciaio che sono state prodotte da una fabbrica e devono essere trasportate con dei camion verso i depositi.
+		\begin{lstlisting}
+			at :=
+			F1 Inox     D1   10
+			F1 Inox     D2   11
+			F1 Inox     D3    9
+			F1 Normale  D1   10
+			F1 Normale  D2   16
+			F1 Normale  D3    1
+			F1 Temprato D1    0
+			F1 Temprato D2    0
+			F1 Temprato D3    0
+			F2 Inox     D1    0
+			F2 Inox     D2    0
+			F2 Inox     D3    0
+			F2 Normale  D1    5
+			F2 Normale  D2    0
+			F2 Normale  D3   14
+			F2 Temprato D1   10
+			F2 Temprato D2   10
+			F2 Temprato D3   13;
+		\end{lstlisting}
+
+		Di seguito sono elencati i numeri di camion necessari per trasportare tutto il prodotto verso i depositi.
+		\begin{lstlisting}
+			nc :=
+			F1 D1   2
+			F1 D2   3
+			F1 D3   1
+			F2 D1   2
+			F2 D2   1
+			F2 D3   3;
+		\end{lstlisting}
+
+		Di seguito sono indicate per ogni fabbrica,turno e macchina tutte le produzioni che sono state eseguite.
+		\begin{lstlisting}
+			mAcciaio [F1,*,16-24,*]
+			:  Inox Normale Temprato    :=
+			M1   0      1       0
+			M2   1      0       0
+			M3   1      0       0
+			M4   1      0       0
+
+			 [F1,*,24-8,*]
+			:  Inox Normale Temprato    :=
+			M1   0      1       0
+			M2   0      1       0
+			M3   1      0       0
+			M4   1      0       0
+
+			 [F1,*,8-16,*]
+			:  Inox Normale Temprato    :=
+			M1   0      1       0
+			M2   0      1       0
+			M3   1      0       0
+			M4   1      0       0
+
+			 [F2,*,16-24,*]
+			:  Inox Normale Temprato    :=
+			M1   0      0       1
+			M2   0      0       1
+			M3   0      1       0
+			M4   0      0       0
+
+			 [F2,*,24-8,*]
+			:  Inox Normale Temprato    :=
+			M1   0      0       1
+			M2   0      0       1
+			M3   0      1       0
+			M4   0      0       0
+
+			 [F2,*,8-16,*]
+			:  Inox Normale Temprato    :=
+			M1   0      0       1
+			M2   0      0       1
+			M3   0      1       0
+			M4   0      0       0;
+		\end{lstlisting}
+
+		Come si pu\'o notare tutte le macchine delle due fabbriche, in tutti i turni producono qualche tipo di acciaio.
+		\begin{lstlisting}
+			mAttive [F1,*,*]
+			:  16-24 24-8 8-16    :=
+			M1    1    1    1
+			M2    1    1    1
+			M3    1    1    1
+			M4    1    1    1
+
+			 [F2,*,*]
+			:  16-24 24-8 8-16    :=
+			M1    1    1    1
+			M2    1    1    1
+			M3    1    1    1
+			M4    0    0    0;
+		\end{lstlisting}
+
+		In fine risulta essere conveniente impostare le macchine M\ped{3} e M\ped{4} della fabbrica F\ped{1} alla produzione di acciaio Inox e la macchina M\ped{1} e M\ped{3} della fabbrica F\ped{2} alla produzione rispettivamente di acciaio Temprato e Normale.
+		\begin{lstlisting}
+			mImpostate [F1,*,*]
+			:  Inox Normale Temprato    :=
+			M1   0      1       0
+			M2   0      0       0
+			M3   1      0       0
+			M4   1      0       0
+
+			 [F2,*,*]
+			:  Inox Normale Temprato    :=
+			M1   0      0       1
+			M2   0      0       1
+			M3   0      1       0
+			M4   0      0       0;
+		\end{lstlisting}
+
+
+		Inoltre si ottiene i seguenti valori ottimali per le variabili del problema duale: 
+		\begin{lstlisting}
+			VtempoMNImpostate [F1,*,*]
+			:  16-24 24-8 8-16    :=
+			M1    0    0    0
+			M2    0    0    0
+			M3    0    0    0
+			M4    0    0    0
+
+			 [F2,*,*]
+			:  16-24 24-8 8-16    :=
+			M1    0    0    0
+			M2    0    0    0
+			M3    0    0    0
+			M4    0    0    0;
+
+			VtempoMImpostate [F1,*,*]
+			:  Inox Normale Temprato    :=
+			M1   0      0       0
+			M2   0      0       0
+			M3   0      0       0
+			M4   0      0       0
+
+			 [F2,*,*]
+			:   Inox Normale Temprato    :=
+			M1     0      0       0
+			M2     0      0       0
+			M3     0      0       0
+			M4   300    300     300;
+
+			VCat :=
+			F1 Inox       0
+			F1 Normale    0
+			F1 Temprato   0
+			F2 Inox       0
+			F2 Normale    0
+			F2 Temprato   0;
+
+			VRichiesteMinDepositi :=
+			Inox     D1   0
+			Inox     D2   0
+			Inox     D3   0
+			Normale  D1   0
+			Normale  D2   0
+			Normale  D3   0
+			Temprato D1   0
+			Temprato D2   0
+			Temprato D3   0;
+
+			VRichiesteMaxDepositi [*] :=
+			D1  0
+			D2  0
+			D3  0;
+
+			VUCamion :=
+			F1 D1   0
+			F1 D2   0
+			F1 D3   0
+			F2 D1   0
+			F2 D2   0
+			F2 D3   0;
+
+			VUmAcciaio [F1,*,16-24,*]
+			:    Inox Normale Temprato    :=
+			M1   1000     0      1000
+			M2      0     0         0
+			M3      0     0         0
+			M4      0     0         0
+
+			 [F1,*,24-8,*]
+			:    Inox Normale Temprato    :=
+			M1   1000     0      1000
+			M2      0     0         0
+			M3      0     0         0
+			M4      0     0         0
+
+			 [F1,*,8-16,*]
+			:    Inox Normale Temprato    :=
+			M1   1000     0      1000
+			M2      0     0         0
+			M3      0     0         0
+			M4      0     0         0
+
+			 [F2,*,16-24,*]
+			:    Inox Normale Temprato    :=
+			M1      0      0      0
+			M2   1000    500      0
+			M3      0      0      0
+			M4      0      0      0
+
+			 [F2,*,24-8,*]
+			:    Inox Normale Temprato    :=
+			M1      0      0      0
+			M2   1000    500      0
+			M3      0      0      0
+			M4      0      0      0
+
+			 [F2,*,8-16,*]
+			:    Inox Normale Temprato    :=
+			M1      0      0      0
+			M2   1000    500      0
+			M3      0      0      0
+			M4      0      0      0;
+
+			VUmAttive [F1,*,*]
+			:  16-24 24-8 8-16    :=
+			M1    0    0    0
+			M2    0    0    0
+			M3    0    0    0
+			M4    0    0    0
+
+			 [F2,*,*]
+			:  16-24 24-8 8-16    :=
+			M1    0    0    0
+			M2    0    0    0
+			M3    0    0    0
+			M4    0    0    0;
+
+			VUmImpostate [F1,*,*]
+			:  Inox Normale Temprato    :=
+			M1   0    99850     0
+			M2   0        0     0
+			M3   0        0     0
+			M4   0        0     0
+
+			 [F2,*,*]
+			:  Inox Normale Temprato    :=
+			M1   0      0         0
+			M2   0      0     99850
+			M3   0      0         0
+			M4   0      0         0;
+
+			VmImpostateObbligatorie [F1,*,*]
+			:  Inox   Normale  Temprato    :=
+			M1   0    -9985000     0
+			M2   0           0     0
+			M3   0           0     0
+			M4   0           0     0
+
+			 [F2,*,*]
+			:  Inox Normale   Temprato    :=
+			M1   0      0            0
+			M2   0      0     -9985000
+			M3   0      0            0
+			M4   0      0            0;
+
+			VCmImpostate :=
+			F1 M1   300
+			F1 M2     0
+			F1 M3     0
+			F1 M4     0
+			F2 M1     0
+			F2 M2   300
+			F2 M3     0
+			F2 M4     0;
+
+			VtempoMNImpostate [F1,*,*]
+			:  16-24 24-8 8-16    :=
+			M1    0    0    0
+			M2    0    0    0
+			M3    0    0    0
+			M4    0    0    0
+
+			 [F2,*,*]
+			:  16-24 24-8 8-16    :=
+			M1    0    0    0
+			M2    0    0    0
+			M3    0    0    0
+			M4    0    0    0;
+		\end{lstlisting}
+
+
+
+	\newpage
+
+%----------------------------------------------------------------------------------------
+% SOLUZIONE PROBLEMA
+%----------------------------------------------------------------------------------------
+\section{File}
+Di seguito sono riportati i file .dat e .mod che rappresentano un modello della soluzione del problema
+
+\subsection{File .dat}
+\lstinputlisting{../amplFiles/steel.dat}
+
+\newpage
+
+\subsection{File .mod}
+\lstinputlisting{../amplFiles/steel.mod}
+
+\newpage
+
+\subsection{Soluzione}
+\lstinputlisting{../amplFiles/solution.txt}
+
+
+
+
+
+
+\end{document}
