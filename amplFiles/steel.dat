@@ -40,7 +40,7 @@ param tempiMaxMacchine:=
       	      "M3" 7 6 7
 	           "M4" 0 0 0;
 
-#Tempi neccessari per produrre una tonnellata di un tipo di acciaio lavorato
+#Tempi necessari per produrre una tonnellata di un tipo di acciaio lavorato
 param tempiProd:=
 ["F1",*,"8-16",*]: "Normale" "Inox" "Temprato" :=
       "M1" 0.9 1.5 1.1
@@ -88,7 +88,7 @@ param costoPuliziaM := 150;
 param tempoPuliziaM := 1;
 
 #Costo di ogni operaio che segue le macchine durante la loro produzione
-param costoOperaioProduzione := 80;
+param costoOperaioProduzione := 10;
 
 #Macchine impostate obbligatoriamente alla produzione di un solo tipo di acciaio lavorato
 #Si = 1         No = 0
@@ -106,7 +106,7 @@ param mImpostateObbligatorie :=
 	      "M4" 0 0 0; 
 
 
-#Costi di strasporto del camion da una fabbrica ad un deposito
+#Costi di trasporto del camion da una fabbrica ad un deposito
 param costiTrasporto: "D1" "D2" "D3" := 
       "F1" 1000 1340 2500
       "F2" 1000 1900 1200;
@@ -128,7 +128,7 @@ param richiesteMinDepositi: "D1" "D2" "D3" :=
       "Inox" 10 8 9
       "Temprato" 10 10 12;
 
-#Massima capacità di acciaio lavorato per ogni deposito
+#Massima capienza di acciaio lavorato per ogni deposito
 param richiesteMaxDepositi:=
 	"D1" 40
 	"D2" 40
