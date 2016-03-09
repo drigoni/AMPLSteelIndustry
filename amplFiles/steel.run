@@ -1,0 +1,5 @@
+reset;
+model steel.mod;
+data steel.dat;
+option solver cplexamp;
+solve;
