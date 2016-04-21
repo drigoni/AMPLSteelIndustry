@@ -541,7 +541,7 @@ Di seguito sarà data una spiegazione della soluzione
 
 		Il vincolo \textit{VtempoMNImpostate}(Vincolo di tempo macchine non impostate) fa si che per ogni fabbrica, macchina e turno, il tempo effettivo di lavorazione dell'acciaio che viene prodotto, sia sempre inferiore o uguale al tempo di lavoro dei dipendenti imposto dai sindacati.
 		In particolar modo tiene conto anche del tempo di pulizia della macchina solo se essa non è impostata.
-		\textit{(mAcciaio[f,m,t,p]- mImpostate[f,m,p])} risulta 1 solo quando la macchina non è impostata, altrimenti 1.
+		\textit{(mAcciaio[f,m,t,p]- mImpostate[f,m,p])} risulta 1 solo quando la macchina non è impostata, altrimenti 0.
 		\begin{lstlisting}
 		s.t. VtempoMNImpostate{f in FABBRICHE, m in MACCHINE,t in TURNI}: sum{p in PRODOTTI}(tempiProd[f,m,t,p]*al[f,m,t,p] + (mAcciaio[f,m,t,p]- mImpostate[f,m,p])*tempoPuliziaM) <= tempiMaxMacchine[f,m,t];
 		\end{lstlisting}
