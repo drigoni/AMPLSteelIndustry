@@ -569,8 +569,8 @@ Di seguito sarà data una spiegazione della soluzione
 		s.t. VUCamion{f in FABBRICHE,d in DEPOSITI}: sum{p in PRODOTTI}at[f,p,d] <= nc[f,d]*tonnellatePerCamion;
 		\end{lstlisting}
 
-		Questo vincolo permette di legare la variabile logica \textit{mAcciaio} alla variabile al
-		Poich\'e all'aumentare \textit{mAcciaio} provoca un costo maggiore, non si presenteranno valori spuri in quanto la variabile verr\'a posta in automatico a 0 quando possibile
+		Questo vincolo permette di legare la variabile logica \textit{mAcciaio} alla variabile \textit{al}.
+		Poich\'e l'aumentare di \textit{mAcciaio} aumenta il costo, non si presenteranno valori spuri in quanto la variabile verr\'a posta in automatico a 0 quando possibile
 		\begin{lstlisting}
 		s.t. VUmAcciaio{f in FABBRICHE,m in MACCHINE,t in TURNI,p in PRODOTTI}: al[f,m,t,p] <= bigM*mAcciaio[f,m,t,p];
 		\end{lstlisting}
